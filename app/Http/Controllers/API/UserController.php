@@ -50,6 +50,7 @@ class UserController extends BaseController
             $user = Auth::user();
             $success['token'] =  $user->createToken('MyApp')-> accessToken;
             $success['name'] =  $user->name;
+            $success['id'] =  $user->id;
 
             return $this->sendResponse($success, 'User login successfully.');
         }
