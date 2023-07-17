@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 
-class RegisterController extends BaseController
+class UserController extends BaseController
 {
     /**
      * Register api
@@ -19,9 +19,12 @@ class RegisterController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users',
             'password' => 'required',
             'c_password' => 'required|same:password',
+            'gender' => 'required',
+            'education' => 'required',
+            'age' => 'required',
         ]);
 
         if($validator->fails()){
@@ -31,10 +34,9 @@ class RegisterController extends BaseController
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
-        $success['token'] =  $user->createToken('MyApp')->accessToken;
-        $success['name'] =  $user->name;
+        // $success['token'] =  $user->createToken('MyApp')->accessToken;
 
-        return $this->sendResponse($success, 'User register successfully.');
+        return $this->sendResponse($user, 'User register successfully.');
     }
 
     /**
